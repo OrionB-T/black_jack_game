@@ -2,71 +2,34 @@
 # coding: utf-8
 
 # In[1]:
-
-
 import random
 
-class Card:
-    def __init__(self, suit, rank):
-        self.suit = suit
-        self.rank = rank
+suits = ['♥', '♦', '♣', '♠']
+ranks = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A']
 
-    def __str__(self):
-        return f"{self.rank} of {self.suit}"
+def create_deck():
+  deck = [(rank, suit) for rank in ranks for suit in suits]
+  random.shuffle(deck)
+  return deck
 
-class Deck:
-    def __init__(self):
-        self.cards = []
-        for suit in ["Spades", "Hearts", "Diamonds", "Clubs"]:
-            for rank in range(2, 11):
-                self.cards.append(Card(suit, rank))
-            self.cards.append(Card(suit, "A"))
-            self.cards.append(Card(suit, "K"))
-            self.cards.append(Card(suit, "Q"))
-            self.cards.append(Card(suit, "J"))
+def calculate_hand_value(hand):
+    value = 0
+    num_aces = 0
 
-    def shuffle(self):
-        random.shuffle(self.cards)
+    for card in hand:
+        if card in ['J', 'Q', 'K']:
+            value += 10
+        if card == 'A':
+            num_aces += 1
+        else:
+            value += int(card)
+    for _ in range(num_aces):
+        if value + 11 <= 21:
+            value += 11
+        else:
+            value += 1
 
-    def deal(self):
-        return self.cards.pop()
-
-class Hand:
-    def __init__(self):
-        self.cards = []
-
-    def add_card(self, card):
-        self.cards.append(card)
-
-    def get_rank(self):
-        # TODO: Implement this method to rank the hand
-        return 0
-
-class Game:
-    def __init__(self, players):
-        self.players = players
-        self.deck = Deck()
-        self.current_player = 0
-
-    def start(self):
-        self.deck.shuffle()
-        for player in self.players:
-            player.hand = Hand()
-            for i in range(2):
-                player.hand.add_card(self.deck.deal())
-
-        self.current_player = 0
-
-    def play(self):
-        while True:
-            # TODO: Implement the gameplay loop
-            pass
-
-if __name__ == "__main__":
-    players = [Player("Alice"), Player("Bob")]
-    game = Game(players)
-    game.start()
-    game.play()
+    return value
 # In[ ]:
 
 
