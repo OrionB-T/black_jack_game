@@ -5,7 +5,7 @@
 
 
 print("fhfhf")
-
+print('Put all my money in')
 
 # In[ ]:
 
